@@ -1,0 +1,9 @@
+package com.trevasq.qguard.api;
+import com.trevasq.qguard.api.ApiDtos.*; import com.trevasq.qguard.service.*; import jakarta.validation.Valid; import java.time.*; import java.time.format.DateTimeFormatter; import java.util.*; import org.springframework.format.annotation.DateTimeFormat; import org.springframework.http.*; import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/v1") public class SchedulingController { private final SchedulingService scheduling; private final BookingService bookings; public SchedulingController(SchedulingService s,BookingService b){scheduling=s;bookings=b;}
+ @GetMapping("/availability") public AvailabilityResponse availability(@RequestParam @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date,@RequestParam String timezone){ZoneId z=zone(timezone);List<SlotResponse> slots=scheduling.available(date,z).stream().map(i->new SlotResponse(i,i.plusSeconds(1800),DateTimeFormatter.ofPattern("EEE, MMM d, HH:mm").withZone(z).format(i))).toList();return new AvailabilityResponse(date,z.getId(),slots);}
+ @PostMapping("/bookings") @ResponseStatus(HttpStatus.CREATED) public CreatedBookingResponse create(@Valid @RequestBody CreateBookingRequest r){return bookings.create(r);}
+ @GetMapping("/bookings/manage/{token}") public BookingResponse get(@PathVariable String token){return bookings.get(token);}
+ @PostMapping("/bookings/manage/{token}/reschedule") public BookingResponse reschedule(@PathVariable String token,@Valid @RequestBody RescheduleRequest r){return bookings.reschedule(token,r);}
+ @PostMapping("/bookings/manage/{token}/cancel") @ResponseStatus(HttpStatus.NO_CONTENT) public void cancel(@PathVariable String token){bookings.cancel(token);} private ZoneId zone(String s){try{return ZoneId.of(s);}catch(Exception e){throw new IllegalArgumentException("Invalid IANA timezone");}}
+}

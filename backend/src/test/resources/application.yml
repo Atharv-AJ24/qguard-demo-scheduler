@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:qguard;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa.hibernate.ddl-auto: create-drop
+  flyway.enabled: false
+  mail.host: localhost
+app:
+  public-base-url: http://localhost:5173
+  business-zone: UTC
+  working-hours-start: "09:00"
+  working-hours-end: "17:00"
+  sender: demo@qguard.local
