@@ -1,1 +1,334 @@
-:root{font-family:Inter,system-ui,sans-serif;color:#eaf3ff;background:#071424}*{box-sizing:border-box}body{margin:0}main{max-width:760px;margin:0 auto;padding:60px 24px}header{padding:30px 0}header span{color:#56d9b2;font-weight:700;letter-spacing:.08em}h1{font-size:clamp(2.2rem,7vw,4.6rem);line-height:1.05;margin:.4em 0}form{background:#10243b;border:1px solid #244866;border-radius:16px;padding:28px;display:grid;gap:16px}label{display:grid;gap:7px;font-weight:600}input{padding:11px;border-radius:8px;border:1px solid #42627c;font:inherit}fieldset{border:0;padding:0;display:flex;gap:8px;flex-wrap:wrap}button{padding:11px 14px;border:0;border-radius:8px;background:#56d9b2;color:#062019;font-weight:700;cursor:pointer}.selected{outline:3px solid white}.error{color:#ff9c9c}p{line-height:1.55}
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  color: #eaf3ff;
+  background: #071424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at top right, rgba(86, 217, 178, 0.08), transparent 30%),
+    radial-gradient(circle at top left, rgba(70, 130, 180, 0.08), transparent 30%),
+    #071424;
+}
+
+main {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 48px 24px 70px;
+}
+
+/* ---------- Header ---------- */
+
+header {
+  padding: 20px 0 34px;
+}
+
+header span {
+  display: inline-block;
+  color: #56d9b2;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+header h1 {
+  max-width: 720px;
+  margin: 12px 0 16px;
+  font-size: clamp(2.3rem, 7vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+header p {
+  max-width: 620px;
+  margin: 0;
+  color: #a9bdd2;
+  font-size: 1.05rem;
+}
+
+/* ---------- Form ---------- */
+
+form {
+  background: rgba(16, 36, 59, 0.95);
+  border: 1px solid #244866;
+  border-radius: 20px;
+  padding: 30px;
+  display: grid;
+  gap: 20px;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+form h2 {
+  margin: 0 0 4px;
+  font-size: 1.65rem;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Labels ---------- */
+
+label {
+  display: grid;
+  gap: 8px;
+  color: #eaf3ff;
+  font-weight: 650;
+  font-size: 0.95rem;
+}
+
+/* ---------- Inputs ---------- */
+
+input {
+  width: 100%;
+  padding: 13px 14px;
+
+  border-radius: 10px;
+  border: 1px solid #42627c;
+
+  background: #f4f8fd;
+  color: #071424;
+
+  font: inherit;
+  font-size: 0.98rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+input:hover {
+  border-color: #5c7e99;
+}
+
+input:focus {
+  border-color: #56d9b2;
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 3px rgba(86, 217, 178, 0.16);
+}
+
+/* ---------- Time Slots ---------- */
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 2px 0 4px;
+}
+
+legend {
+  padding: 0;
+  margin-bottom: 10px;
+
+  color: #eaf3ff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+  gap: 10px;
+}
+
+/* All slot buttons */
+
+.slots button {
+  min-height: 58px;
+  padding: 10px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 12px;
+
+  background: #56d9b2;
+  color: #062019;
+
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.slots button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 18px rgba(86, 217, 178, 0.18);
+}
+
+.slots button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Selected slot */
+
+.slots button.selected {
+  outline: none;
+
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 3px rgba(86, 217, 178, 0.28),
+    0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- Booked Slot ---------- */
+
+.slots button.booked {
+  background: #26384a;
+  border: 1px solid #405568;
+
+  color: #9badbd;
+
+  cursor: not-allowed;
+
+  opacity: 0.85;
+
+  box-shadow: none;
+}
+
+.slots button.booked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.slots button.booked small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #8094a7;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  white-space: normal;
+  line-height: 1.2;
+}
+
+/* ---------- Main Confirm Button ---------- */
+
+form > button {
+  width: 100%;
+  margin-top: 4px;
+
+  padding: 14px 18px;
+
+  border: 0;
+  border-radius: 11px;
+
+  background: #56d9b2;
+  color: #062019;
+
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+form > button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 8px 20px rgba(86, 217, 178, 0.2);
+}
+
+form > button:disabled {
+  background: #355064;
+  color: #8297aa;
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+/* ---------- Error ---------- */
+
+.error {
+  margin: 0;
+  padding: 12px 14px;
+
+  border: 1px solid rgba(255, 120, 120, 0.3);
+  border-radius: 10px;
+
+  background: rgba(255, 90, 90, 0.08);
+  color: #ff9c9c;
+
+  font-size: 0.92rem;
+}
+
+/* ---------- General Text ---------- */
+
+p {
+  line-height: 1.55;
+}
+
+/* ---------- Empty Slots ---------- */
+
+fieldset > p {
+  margin: 0;
+  padding: 14px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.04);
+  color: #9db2c7;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 600px) {
+  main {
+    padding: 28px 14px 50px;
+  }
+
+  header {
+    padding: 10px 4px 25px;
+  }
+
+  header h1 {
+    font-size: 2.35rem;
+  }
+
+  form {
+    padding: 22px 18px;
+    border-radius: 16px;
+  }
+
+  .slots {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .slots button {
+    min-height: 54px;
+    font-size: 0.82rem;
+  }
+}
