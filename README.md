@@ -1,66 +1,96 @@
 # QGuard Demo Scheduler
 
-A production-oriented demo scheduling platform for QGuard. It provides a complete flow for visitors to schedule, manage, reschedule, and cancel 30-minute product demo appointments.
+A production-oriented demo scheduling platform built for **QGuard by TrevasQ**.
 
-The project uses a Spring Boot backend, React/Vite frontend, PostgreSQL persistence, Flyway migrations, timezone-aware scheduling, secure booking management tokens, email notifications, and ICS calendar invitations.
+The platform allows visitors to schedule a 30-minute product demonstration, view slot availability in their timezone, receive confirmation emails with calendar invitations, and securely manage their bookings through rescheduling or cancellation.
 
-## Features
+The application is implemented as a modular monolith with a Spring Boot REST API, React frontend, PostgreSQL persistence, Flyway migrations, timezone-aware scheduling, secure booking management tokens, email notifications, and transactional booking protection.
 
-- Schedule 30-minute QGuard demo sessions
-- View available and already-booked time slots
-- Prevent double-booking of the same slot
-- Timezone-aware availability using IANA timezone identifiers
-- Store schedule timestamps as UTC instants
-- Configurable business hours
-- Booking confirmation emails
-- ICS calendar invitations
-- Secure booking management links
-- Cancel and reschedule existing bookings
-- PostgreSQL persistence with Flyway migrations
-- REST API with validation and centralized error handling
-- Docker Compose support for local development
+---
 
-## Booking Flow
+## ✨ Features
 
-1. Visitor opens the QGuard demo scheduler.
-2. Visitor enters contact and company details.
-3. Available 30-minute slots are displayed in the visitor's timezone.
-4. Already-booked slots are clearly marked as booked.
-5. Visitor selects an available slot and confirms the booking.
-6. The backend validates the slot and prevents concurrent double-booking.
-7. A confirmation email and ICS calendar invitation are sent.
-8. The visitor can use the secure management link to view, reschedule, or cancel the booking.
+### Scheduling
 
-## Technology Stack
+- 30-minute demo slots
+- Configurable business working hours
+- Timezone-aware availability
+- Automatic detection of the visitor's timezone
+- Ability to select/change timezone
+- Future slots displayed with clear availability status
+- Already-booked slots displayed separately
 
-### Backend
+### Booking
 
-- Java 21
-- Spring Boot
-- Spring Data JPA / Hibernate
-- PostgreSQL
-- Flyway
-- Maven
+- Visitor details:
+  - Name
+  - Email
+  - Company
+  - Job title
+  - Phone number (optional)
+- Server-side request validation
+- Transactional booking creation
+- Database-level protection against double-booking
+- Unique slot identification
 
-### Frontend
+### Booking Management
 
-- React
-- TypeScript
-- Vite
-- Axios
+- Secure management URL for every booking
+- View booking details
+- Reschedule an existing booking
+- Cancel an existing booking
+- Management tokens are cryptographically generated
+- Only SHA-256 token hashes are persisted
 
-### Infrastructure
+### Notifications
 
-- Docker / Docker Compose
-- PostgreSQL
-- SMTP email
-- ICS calendar invitations
+- Booking confirmation email
+- Booking management link
+- ICS calendar invitation
+- SMTP support
+- Gmail SMTP support for real email delivery
+- Mailpit support for local development
 
-## Run Locally
+### API
 
-### 1. Configure environment variables
+- RESTful Spring Boot API
+- Validation and centralized error handling
+- Swagger/OpenAPI documentation
+- PostgreSQL persistence
+- Flyway database migrations
 
-Copy the example environment file:
+---
 
-```bash
-cp .env.example .env
+## 🔄 Booking Flow
+
+```text
+Landing Page
+     │
+     ▼
+Schedule Demo
+     │
+     ▼
+Enter Visitor Details
+     │
+     ▼
+Select Date & Timezone
+     │
+     ▼
+View Available / Booked Slots
+     │
+     ▼
+Select Available 30-Minute Slot
+     │
+     ▼
+Confirm Booking
+     │
+     ├──────────────► Confirmation Email
+     │
+     ├──────────────► ICS Calendar Invitation
+     │
+     ▼
+Secure Management Link
+     │
+     ├──────────────► View Booking
+     ├──────────────► Reschedule
+     └──────────────► Cancel
