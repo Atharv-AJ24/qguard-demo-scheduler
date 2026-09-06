@@ -32,6 +32,8 @@ services:
       MAIL_STARTTLS: ${MAIL_STARTTLS}
       MAIL_SENDER: ${MAIL_SENDER}
 
+      DEMO_RECIPIENT_EMAIL: ${DEMO_RECIPIENT_EMAIL}
+
       APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-http://localhost:5173}
 
     ports: ["8080:8080"]

@@ -1,0 +1,2 @@
+ALTER TABLE bookings
+ADD COLUMN timezone VARCHAR(100) NOT NULL DEFAULT 'Asia/Kolkata';

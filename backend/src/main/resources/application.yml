@@ -22,5 +22,6 @@ app:
   working-hours-start: ${WORKING_HOURS_START:09:00}
   working-hours-end: ${WORKING_HOURS_END:17:00}
   sender: ${MAIL_SENDER:demo@qguard.local}
+  demo-recipient-email: ${DEMO_RECIPIENT_EMAIL:}
 
 management.endpoints.web.exposure.include: health,info

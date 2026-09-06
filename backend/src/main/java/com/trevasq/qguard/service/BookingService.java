@@ -6,6 +6,7 @@ import com.trevasq.qguard.domain.*;
 
 import jakarta.transaction.Transactional;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.UUID;
 
@@ -37,6 +38,7 @@ public class BookingService {
 
     @Transactional
     public CreatedBookingResponse create(CreateBookingRequest request) {
+
         schedule.assertBookable(request.startsAt());
 
         String token = tokens.create();
@@ -48,6 +50,7 @@ public class BookingService {
                 request.company().trim(),
                 request.jobTitle().trim(),
                 blankToNull(request.phone()),
+                zone(request.timezone()).getId(),
                 request.startsAt(),
                 request.startsAt().plusSeconds(1800),
                 tokens.hash(token)
@@ -61,10 +64,16 @@ public class BookingService {
 
         String managementUrl = managementUrl(token);
 
-        notify.confirmation(booking, managementUrl);
+        notify.confirmation(
+                booking,
+                managementUrl
+        );
 
         return new CreatedBookingResponse(
-                dto(booking, zone(request.timezone())),
+                dto(
+                        booking,
+                        zone(request.timezone())
+                ),
                 managementUrl
         );
     }
@@ -74,8 +83,13 @@ public class BookingService {
             String token,
             RescheduleRequest request
     ) {
+
         Booking booking = managed(token);
 
+        // Remember the old booking time before changing it.
+        Instant previousStart = booking.getStartsAt();
+
+        // Make sure the new slot is still available.
         schedule.assertBookable(request.startsAt());
 
         try {
@@ -85,6 +99,11 @@ public class BookingService {
             throw new SchedulingService.SlotTakenException();
         }
 
+        /*
+         * Temporary:
+         * We will replace this with a dedicated reschedule
+         * notification in the next step.
+         */
         notify.confirmation(
                 booking,
                 managementUrl(token)
@@ -98,6 +117,7 @@ public class BookingService {
 
     @Transactional
     public void cancel(String token) {
+
         Booking booking = managed(token);
 
         if (booking.getStatus() == BookingStatus.CANCELLED) {
@@ -105,11 +125,13 @@ public class BookingService {
         }
 
         booking.cancel();
+
         repo.save(booking);
     }
 
     @Transactional
     public BookingResponse get(String token) {
+
         return dto(
                 managed(token),
                 properties.businessZone()
@@ -117,16 +139,23 @@ public class BookingService {
     }
 
     private Booking managed(String token) {
+
         return repo.findByManagementTokenHash(
                 tokens.hash(token)
-        ).orElseThrow(UnknownManagementTokenException::new);
+        ).orElseThrow(
+                UnknownManagementTokenException::new
+        );
     }
 
     private String managementUrl(String token) {
-        return properties.publicBaseUrl() + "/manage/" + token;
+
+        return properties.publicBaseUrl()
+                + "/manage/"
+                + token;
     }
 
     private ZoneId zone(String timezone) {
+
         try {
             return ZoneId.of(timezone);
         } catch (Exception e) {
@@ -136,7 +165,11 @@ public class BookingService {
         }
     }
 
-    private BookingResponse dto(Booking booking, ZoneId zone) {
+    private BookingResponse dto(
+            Booking booking,
+            ZoneId zone
+    ) {
+
         return new BookingResponse(
                 booking.getId(),
                 booking.getName(),
@@ -152,6 +185,7 @@ public class BookingService {
     }
 
     private String blankToNull(String value) {
+
         return value == null || value.isBlank()
                 ? null
                 : value.trim();
